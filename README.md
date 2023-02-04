@@ -9,7 +9,7 @@
 安装php7.4（安装redis扩展）
 安装redis7（设置密码123654后重启redis服务）
 安装supervisor
-uniapp打包h5后放到public目录
+uniapp修改.env打包h5后放public目录
 ```
 
 #### 2、supervisor添加以下4个进程
