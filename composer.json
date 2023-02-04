@@ -1,0 +1,7 @@
+{
+    "require": {
+        "linwj/okex": "^2.2.5",
+        "predis/predis": "^1.1",
+        "workerman/crontab": "^1.0"
+    }
+}
