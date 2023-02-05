@@ -60,11 +60,11 @@
 								<view class="light text-xs pt-3.5">{{ appStore.data.other.today_count }} 笔</view>
 							</van-grid-item>
 							<van-grid-item>
-								<view class="light text-xs font-bold">今日盈利</view>
+								<view class="light text-xs font-bold">今日浮盈</view>
 								<view class="light text-xs pt-3.5">{{ appStore.data.other.today_profit }}</view>
 							</van-grid-item>
 							<van-grid-item>
-								<view class="light text-xs font-bold">今日盈利率</view>
+								<view class="light text-xs font-bold">今日浮盈率</view>
 								<view class="light text-xs pt-3.5">{{ appStore.data.other.today_profit_ratio }} %</view>
 							</van-grid-item>
 						</van-grid>
