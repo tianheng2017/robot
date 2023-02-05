@@ -56,16 +56,16 @@
 						</van-grid>
 						<van-grid :column-num="3">
 							<van-grid-item>
+								<view class="light text-xs font-bold">今日做单</view>
+								<view class="light text-xs pt-3.5">{{ appStore.data.other.today_count }} 笔</view>
+							</van-grid-item>
+							<van-grid-item>
 								<view class="light text-xs font-bold">今日盈利</view>
 								<view class="light text-xs pt-3.5">{{ appStore.data.other.today_profit }}</view>
 							</van-grid-item>
 							<van-grid-item>
-								<view class="light text-xs font-bold">今日盈率</view>
+								<view class="light text-xs font-bold">今日盈利率</view>
 								<view class="light text-xs pt-3.5">{{ appStore.data.other.today_profit_ratio }} %</view>
-							</van-grid-item>
-							<van-grid-item>
-								<view class="light text-xs font-bold">今日做单</view>
-								<view class="light text-xs pt-3.5">{{ appStore.data.other.today_count }} 笔</view>
 							</van-grid-item>
 						</van-grid>
 					</van-tab>
@@ -86,7 +86,7 @@
 						</van-grid>
 						<van-grid :column-num="3">
 							<van-grid-item>
-								<view class="light text-sm font-bold">初始保证金</view>
+								<view class="light text-sm font-bold">占用保证金</view>
 								<view class="light text-sm pt-3.5">{{ appStore.data.other.frozenBal }}</view>
 							</van-grid-item>
 							<van-grid-item>
@@ -108,7 +108,7 @@
 								<view class="light text-sm pt-3.5">{{ appStore.data.other.uplRatio }} %</view>
 							</van-grid-item>
 							<van-grid-item>
-								<view class="light text-sm font-bold">已补仓</view>
+								<view class="light text-sm font-bold">本单已补仓</view>
 								<view class="light text-sm pt-3.5">{{ appStore.data.other.addPositionNum }} 次</view>
 							</van-grid-item>
 						</van-grid>
