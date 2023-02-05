@@ -10,7 +10,7 @@
 安装redis7（设置密码123654后重启redis服务）
 安装supervisor
 修改uniapp目录下.env
-在uniapp目录下执行 ```yarn build:h5```
+在uniapp目录下执行打包命令：yarn build:h5
 ```
 
 #### 2、supervisor添加以下4个进程
