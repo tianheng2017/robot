@@ -14,7 +14,7 @@
 					<van-tab title="数据统计">
 						<van-grid :column-num="3">
 							<van-grid-item>
-								<view class="light text-sm font-bold">初始资金</view>
+								<view class="light text-base font-bold">初始资金</view>
 								<view class="light text-sm pt-3.5">{{ appStore.data.other.usdt_init }}</view>
 							</van-grid-item>
 							<van-grid-item>
