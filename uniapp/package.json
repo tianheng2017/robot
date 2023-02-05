@@ -22,7 +22,7 @@
     "build:app-android": "uni build -p app-android",
     "build:app-ios": "uni build -p app-ios",
     "build:custom": "uni build -p",
-    "build:h5": "uni build && node scripts/release.mjs && cd .. && git pull && git add . && git commit -m 'change' && git push",
+    "build:h5": "uni build && node scripts/release.mjs",
     "build:h5:ssr": "uni build --ssr",
     "build:mp-alipay": "uni build -p mp-alipay",
     "build:mp-baidu": "uni build -p mp-baidu",
