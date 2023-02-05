@@ -42,7 +42,7 @@
 						</van-grid>
 						<van-grid :column-num="3">
 							<van-grid-item>
-								<view class="light text-xs font-bold">止损补仓</view>
+								<view class="light text-xs font-bold">设定补仓</view>
 								<view class="light text-xs pt-3.5">{{ appStore.data.other.allAddPositionNum }} 次</view>
 							</van-grid-item>
 							<van-grid-item>
