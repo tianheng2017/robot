@@ -42,7 +42,7 @@
 						</van-grid>
 						<van-grid :column-num="3">
 							<van-grid-item>
-								<view class="light text-xs font-bold">设定补仓</view>
+								<view class="light text-xs font-bold">最大补仓</view>
 								<view class="light text-xs pt-3.5">{{ appStore.data.other.allAddPositionNum }} 次</view>
 							</van-grid-item>
 							<van-grid-item>
@@ -72,12 +72,12 @@
 					<van-tab title="当前持仓">
 						<van-grid :column-num="3">
 							<van-grid-item>
-								<view class="light text-sm font-bold">开仓均价</view>
-								<view class="light text-sm pt-3.5">{{ appStore.data.other.avgPx }}</view>
-							</van-grid-item>
-							<van-grid-item>
 								<view class="light text-sm font-bold">当前价格</view>
 								<view class="light text-sm pt-3.5">{{ appStore.data.other.last }}</view>
+							</van-grid-item>
+							<van-grid-item>
+								<view class="light text-sm font-bold">开仓均价</view>
+								<view class="light text-sm pt-3.5">{{ appStore.data.other.avgPx }}</view>
 							</van-grid-item>
 							<van-grid-item>
 								<view class="light text-sm font-bold">开单策略</view>
@@ -120,6 +120,27 @@
 							</block>
 						</van-cell-group>
 					</van-tab>
+					<van-tab title="基础配置">
+						<van-form @submit="onSubmit">
+							<van-cell-group class="pt-2.5">
+								<van-field v-model="formData.firstOrder" type="number" name="首单数量" label="首单数量"
+									placeholder="首单数量" :rules="[{ required: true, message: '请填写首单数量' }]" />
+								<van-field v-model="formData.allAddPositionNum" type="digit" name="最大补仓" label="最大补仓"
+									placeholder="最大补仓次数" :rules="[{ required: true, message: '请填写最大补仓次数' }]" />
+								<van-field v-model="formData.lever" type="digit" name="杠杆倍数" label="杠杆倍数"
+									placeholder="杠杆倍数" :rules="[{ required: true, message: '请填写杠杆倍数' }]" />
+								<van-field v-model="formData.profitRatio" type="number" name="止盈率" label="止盈率(%)"
+									placeholder="止盈率" :rules="[{ required: true, message: '请填写止盈率' }]" />
+								<van-field v-model="formData.stopLossRatio" type="number" name="止损率" label="止损率(%)"
+									placeholder="止损率" :rules="[{ required: true, message: '请填写止损率' }]" />
+							</van-cell-group>
+							<div style="margin: 16px;">
+								<van-button plain round block type="success" native-type="submit">
+									提交
+								</van-button>
+							</div>
+						</van-form>
+					</van-tab>
 				</van-tabs>
 				<van-back-top />
 				<view class="text-center text-title2 text-sm fixed bottom-2 right-0 left-0">
@@ -138,6 +159,9 @@
 		reactive,
 		ref
 	} from 'vue'
+	import {
+		showToast
+	} from 'vant'
 	import useAppStore from '@/store/modules/app'
 
 	// 状态数据
@@ -147,6 +171,19 @@
 	const themeVars = reactive({
 		cellLineHeight: '10px'
 	})
+
+	// 表单数据
+	const formData = reactive({
+		'firstOrder': appStore.data.other.firstOrder,
+		'allAddPositionNum': appStore.data.other.allAddPositionNum,
+		'lever': appStore.data.other.lever,
+		'profitRatio': appStore.data.other.profitRatio,
+		'stopLossRatio': appStore.data.other.stopLossRatio,
+	})
+	// 表单事件
+	const onSubmit = () => {
+		showToast('开发中')
+	}
 
 	// 创建webSocket
 	uni.connectSocket({
@@ -178,7 +215,7 @@
 	onUnload(() => {
 		uni.closeSocket()
 	})
-	
+
 	// 图标预加载
 	onMounted(() => {
 		appStore.preload()

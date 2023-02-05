@@ -4,6 +4,7 @@ import {
 import App from "./App.vue"
 import store from '@/store'
 import { ConfigProvider } from 'vant'
+import 'vant/lib/index.css'
 import '@/style/index.css'
 
 export function createApp() {
