@@ -113,7 +113,7 @@
 							</van-grid-item>
 						</van-grid>
 					</van-tab>
-					<van-tab title="执行日志">
+					<van-tab title="运行日志">
 						<van-cell-group>
 							<block v-for="(v, i) in appStore.data.list" :key="i">
 								<van-cell :border="false" :title-class="i ? '' : 'text-red mt-2.5'" :title="v" />
@@ -163,7 +163,7 @@
 		uni.onSocketMessage(function(res) {
 			// 格式化数据
 			res = JSON.parse(res.data)
-			// 获取执行日志
+			// 获取运行日志
 			appStore.data.list = res.data.list
 			// 获取其他数据
 			appStore.data.other = res.data.other
