@@ -22,8 +22,8 @@
 								<view class="light text-sm pt-3.5">{{ appStore.data.other.eq }}</view>
 							</van-grid-item>
 							<van-grid-item>
-								<view class="light text-sm font-bold">开单策略</view>
-								<view class="light text-sm pt-3.5">随机多空</view>
+								<view class="light text-sm font-bold">杠杆倍数</view>
+								<view class="light text-sm pt-3.5">{{ appStore.data.other.lever }} x</view>
 							</van-grid-item>
 						</van-grid>
 						<van-grid :column-num="3">
@@ -80,8 +80,8 @@
 								<view class="light text-sm pt-3.5">{{ appStore.data.other.last }}</view>
 							</van-grid-item>
 							<van-grid-item>
-								<view class="light text-sm font-bold">杠杆倍数</view>
-								<view class="light text-sm pt-3.5">{{ appStore.data.other.lever }} x</view>
+								<view class="light text-sm font-bold">开单策略</view>
+								<view class="light text-sm pt-3.5">随机多空</view>
 							</van-grid-item>
 						</van-grid>
 						<van-grid :column-num="3">
