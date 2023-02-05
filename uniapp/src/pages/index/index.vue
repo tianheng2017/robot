@@ -134,6 +134,7 @@
 	} from '@dcloudio/uni-app';
 	import {
 		computed,
+		onMounted,
 		reactive,
 		ref
 	} from 'vue'
@@ -176,6 +177,11 @@
 	// 离开页面关闭websocket
 	onUnload(() => {
 		uni.closeSocket()
+	})
+	
+	// 图标预加载
+	onMounted(() => {
+		appStore.preload()
 	})
 </script>
 <style scoped>

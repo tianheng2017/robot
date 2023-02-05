@@ -1,10 +1,16 @@
-import { defineStore } from 'pinia'
-import { computed, reactive, ref } from 'vue'
+import {
+	defineStore
+} from 'pinia'
+import {
+	computed,
+	reactive,
+	ref
+} from 'vue'
 
 const useAppStore = defineStore('app', () => {
 	// 当前主题
 	const theme = ref('light')
-	
+
 	// 主题切换
 	const change = () => {
 		if (theme.value == 'light') {
@@ -13,7 +19,7 @@ const useAppStore = defineStore('app', () => {
 		}
 		theme.value = 'light'
 	}
-	
+
 	// 当前图标
 	const icon = computed(() => {
 		if (theme.value == 'light') {
@@ -21,22 +27,36 @@ const useAppStore = defineStore('app', () => {
 		}
 		return '/static/light-theme.svg'
 	})
-	
+
 	// 页面数据
 	const data = reactive({
 		list: {},
 		other: {},
 	})
-	
+
 	// 当前标签栏
 	const tab = ref(0)
-	
+
+	// 图表预加载
+	const preload = () => {
+		const imgs = [
+			"/static/dark-theme.svg",
+			"/static/light-theme.svg",
+		]
+		for (let img of imgs) {
+			let image = new Image()
+			image.src = img
+			image.onload = () => {}
+		}
+	}
+
 	return {
 		theme,
 		change,
 		data,
 		tab,
 		icon,
+		preload,
 	}
 }, {
 	// store持久化
