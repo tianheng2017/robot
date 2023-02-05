@@ -9,7 +9,8 @@
 安装php7.4（安装redis扩展）
 安装redis7（设置密码123654后重启redis服务）
 安装supervisor
-uniapp修改.env打包h5后放public目录
+修改uniapp目录下.env
+在uniapp目录下执行 ```yarn build:h5```
 ```
 
 #### 2、supervisor添加以下4个进程
