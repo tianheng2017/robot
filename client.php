@@ -241,8 +241,8 @@ class Client
         echo $msg;
         // 消息入队列
         $this->redis->lpush('robotLog', $msg);
-        // 队列只保存最新14条消息
-        if ($this->redis->llen('robotLog') > 14) {
+        // 队列只保存最新13条消息
+        if ($this->redis->llen('robotLog') > 13) {
             $this->redis->rpop('robotLog');
         }
     }
