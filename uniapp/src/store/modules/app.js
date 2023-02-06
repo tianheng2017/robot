@@ -37,9 +37,10 @@ const useAppStore = defineStore('app', () => {
 	// 当前标签栏
 	const tab = ref(0)
 
-	// 图表预加载
+	// 图片预加载
 	const preload = () => {
 		const imgs = [
+			"/static/logo.png",
 			"/static/dark-theme.svg",
 			"/static/light-theme.svg",
 		]
@@ -60,7 +61,8 @@ const useAppStore = defineStore('app', () => {
 	}
 }, {
 	// store持久化
-	persist: true
+	persist: true,
+	storage: sessionStorage,
 })
 
 export default useAppStore
