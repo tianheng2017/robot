@@ -31,7 +31,7 @@ class Client
         $this->okex_socket->getSubscribe([
             ["channel" => "positions", "instType" => "SWAP", "instId" => $this->redis->hget('config', 'currency')],
         ], function ($data) {
-            // 非 机器人暂停 或 接口不通
+            // 机器人没有暂停 且 接口也通畅
             if (!$this->redis->exists('stop_robot') && !$this->redis->exists('rest')) {
                 // 当前有仓位
                 if (!empty(array_values($data)[0]['data'])) {
@@ -176,7 +176,7 @@ class Client
                 return false;
             // 其他错误
             } else if ($result['code'] > 0) {
-                throw new Exception($result['data'][0]['sMsg'] || $result['msg']);
+                throw new Exception(json_encode($result));
             }
             
             // 今日做单次数+1
@@ -185,7 +185,7 @@ class Client
             $this->redis->set('lastNum', $sz ?: $this->redis->hget('config', 'firstOrder'));
             // 补仓成功
             if ($sz > 0) {
-                $this->writeln('补仓成功，数量：'.$sz.' '.$this->redis->hget('config', 'currentcyCoin'));
+                $this->writeln('补仓成功，数量：'.$sz.' '.$this->redis->hget('config', 'currencyCoin'));
                 // 补仓次数+1
                 $this->redis->Incr('addPositionNum');
                 // 解补仓锁
@@ -197,6 +197,7 @@ class Client
         } catch (\Exception $e){
             $this->writeln('报错：'.$e->getMessage());
         }
+        return true;
     }
     
     // 市价清仓
@@ -218,7 +219,7 @@ class Client
                 return false;
             // 普通错误    
             } else if ($result['code'] > 0) {
-                throw new Exception($result['data'][0]['sMsg'] ?? $result['msg']);
+                throw new Exception(json_encode($result));
             }
             
             $this->writeln('清仓成功，等待开单...');
@@ -233,6 +234,7 @@ class Client
         } catch (\Exception $e){
             $this->writeln('报错：'.$e->getMessage());
         }
+        return true;
     }
     
     // 日志操作与显示
@@ -248,6 +250,7 @@ class Client
         if ($this->redis->llen('robotLog') > 13) {
             $this->redis->rpop('robotLog');
         }
+        return true;
     }
     
     // 通过策略计算补仓数量
