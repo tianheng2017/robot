@@ -112,9 +112,10 @@
 						</van-grid>
 					</van-tab>
 					<van-tab title="运行日志">
-						<van-cell-group>
+						<van-cell-group v-if="appStore.data.list.length">
 							<block v-for="(v, i) in appStore.data.list" :key="i"><van-cell :border="false" :title-class="i ? '' : 'text-red mt-2.5'" :title="v" /></block>
 						</van-cell-group>
+						<van-empty v-else class="mt-2.5" description="暂无数据" />
 					</van-tab>
 					<van-tab title="基础配置">
 						<van-form @submit="onSubmit">
@@ -159,6 +160,14 @@
 									placeholder="止损率"
 									:rules="[{ required: true, message: '请填写止损率' }]"
 								/>
+								<van-field
+									v-model="formData.password"
+									type="password"
+									name="操作密码"
+									label="操作密码"
+									placeholder="操作密码"
+									:rules="[{ required: true, message: '请填写操作密码' }]"
+								/>
 							</van-cell-group>
 							<div style="margin: 16px;"><van-button plain round block type="success" native-type="submit">提交</van-button></div>
 						</van-form>
@@ -190,7 +199,8 @@ const formData = reactive({
 	allAddPositionNum: appStore.data.other.allAddPositionNum,
 	lever: appStore.data.other.lever,
 	profitRatio: appStore.data.other.profitRatio,
-	stopLossRatio: appStore.data.other.stopLossRatio
+	stopLossRatio: appStore.data.other.stopLossRatio,
+	password: '123456',
 });
 // 表单事件
 const onSubmit = () => {
@@ -240,12 +250,3 @@ onMounted(() => {
 	appStore.preload();
 });
 </script>
-<style scoped>
-.van-theme-dark body {
-	background-color: black;
-}
-
-.van-theme-dark body .light {
-	color: #fff;
-}
-</style>

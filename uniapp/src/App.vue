@@ -14,4 +14,11 @@ export default {
 
 <style>
 /*每个页面公共css */
+.van-theme-dark body {
+	background-color: black;
+}
+
+.van-theme-dark body .light {
+	color: #fff;
+}
 </style>
