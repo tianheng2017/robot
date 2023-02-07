@@ -286,9 +286,9 @@ class Client
         if (empty($data)) return false;
         
         // 开仓平均价
-        $this->redis->hset('info', 'avgPx', round($data['avgPx'], 2));
+        $this->redis->hset('info', 'avgPx', round($data['avgPx'], 4));
         // 最新成交价
-        $this->redis->hset('info', 'last', round($data['last'], 2));
+        $this->redis->hset('info', 'last', round($data['last'], 4));
         // 未实现收益
         $this->redis->hset('info', 'upl', round($data['upl'], 2));
         // 未实现收益率
