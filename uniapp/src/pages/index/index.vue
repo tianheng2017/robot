@@ -123,7 +123,7 @@
 		[{
 				'last': '当前价格',
 				'avgPx': '开仓均价',
-				'billingStrategy': '随机多空',
+				'billingStrategy': '开单策略',
 			},
 			{
 				'frozenBal': '占用保证金',
