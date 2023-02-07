@@ -176,7 +176,7 @@ class Client
                 return false;
             // 其他错误
             } else if ($result['code'] > 0) {
-                throw new Exception(json_encode($result['data'][0]));
+                throw new Exception(json_encode($result['data'][0]['sMsg']));
             }
             
             // 今日做单次数+1
@@ -219,7 +219,7 @@ class Client
                 return false;
             // 普通错误    
             } else if ($result['code'] > 0) {
-                throw new Exception(json_encode($result['data'][0]));
+                throw new Exception(json_encode($result['data'][0]['sMsg']));
             }
             
             $this->writeln('清仓成功，等待开单...');
