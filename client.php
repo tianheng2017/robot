@@ -31,26 +31,24 @@ class Client
         $this->okex_socket->getSubscribe([
             ["channel" => "positions", "instType" => "SWAP", "instId" => $this->redis->hget('config', 'currentcy')],
         ], function ($data) {
-            // 机器人暂停
-            if ($this->redis->exists('stop_robot')) return false;
-            // 接口不通
-            if ($this->redis->exists('rest')) return false;
-            
-            // 当前有仓位
-            if (!empty(array_values($data)[0]['data'])) {
-                // 持续刷新持仓锁，连续30秒都没持仓数据才准开单，只做单仓位
-                $this->redis->setex('positionLock', 30, 1);
-                // 解析数据
-                $data = array_values($data)[0]['data'];
-                // 持仓处理
-                $this->orderHandle($data);
-            // 当前无持仓，也无开单锁
-            } else if (!$this->redis->exists('positionLock') && !$this->redis->exists('orderLock')) {
-                $this->writeln('近30秒无持仓，随机方向开单...');
-                // 上开单锁，不重要，处理完无需解锁，休息下
-                $this->redis->setex('orderLock', 10, 1);
-                // 随机多空方向，随机0-100，大于50做多，否则做空
-                mt_rand(0, 100) > 50 ? $this->createOrder('buy', 'long') : $this->createOrder('sell', 'short');
+            // 非 机器人暂停 或 接口不通
+            if (!$this->redis->exists('stop_robot') && !$this->redis->exists('rest')) {
+                // 当前有仓位
+                if (!empty(array_values($data)[0]['data'])) {
+                    // 持续刷新持仓锁，连续30秒都没持仓数据才准开单，只做单仓位
+                    $this->redis->setex('positionLock', 30, 1);
+                    // 解析数据
+                    $data = array_values($data)[0]['data'];
+                    // 持仓处理
+                    $this->orderHandle($data);
+                    // 当前无持仓，也无开单锁
+                } else if (!$this->redis->exists('positionLock') && !$this->redis->exists('orderLock')) {
+                    $this->writeln('近30秒无持仓，随机方向开单...');
+                    // 上开单锁，不重要，处理完无需解锁，休息下
+                    $this->redis->setex('orderLock', 10, 1);
+                    // 随机多空方向，随机0-100，大于50做多，否则做空
+                    mt_rand(0, 100) > 50 ? $this->createOrder('buy', 'long') : $this->createOrder('sell', 'short');
+                }
             }
         }, true);
     }
