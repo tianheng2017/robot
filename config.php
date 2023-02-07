@@ -26,7 +26,7 @@ $config = [
         // 补仓次数
         'allAddPositionNum'         =>  10,
         // 首单数量
-        'firstOrder'                =>  20000,
+        'firstOrder'                =>  50000,
         // USDT初始资金
         'usdtInit'                  =>  7000,
 		// 永续交易对
