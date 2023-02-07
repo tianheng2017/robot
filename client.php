@@ -153,7 +153,7 @@ class Client
         try {
 			// 此处使用API下单，而不是websocket，保证稳定性
             $result = $this->okex->trade()->postOrder([
-                'instId'    =>  $this->redis->hget('config', 'currentcy'),
+                'instId'    =>  (string)$this->redis->hget('config', 'currentcy'),
                 'tdMode'    =>  'cross',
                 'side'      =>  $side,
                 'posSide'   =>  $posSide,
