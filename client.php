@@ -159,7 +159,7 @@ class Client
                 'posSide'   =>  $posSide,
                 'ordType'   =>  'market',
                 // 非补仓读取首单数量
-                'sz'        =>  ($sz ?: $this->redis->hget('config', 'firstOrder')) / 100,
+                'sz'        =>  ($sz ?: $this->redis->hget('config', 'firstOrder')) / 10,
             ]);
             
             // code强转整数
