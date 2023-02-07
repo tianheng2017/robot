@@ -18,22 +18,22 @@ class Client
     
     public function __construct(array $config)
     {
-        // 初始化
+        // 初始化/载入配置
         $this->init($config);
+		
         // 频道订阅
         $this->okex_socket->subscribe([
             // 持仓频道
-            ["channel" => "positions", "instType" => "SWAP", "instId" => "ETH-USDT-SWAP"],
+            ["channel" => "positions", "instType" => "SWAP", "instId" => $this->redis->hget('config', 'currentcy')],
         ]);
         
         // 获取持仓频道数据推送
         $this->okex_socket->getSubscribe([
-            // 永续ETH-USDT
-            ["channel" => "positions", "instType" => "SWAP", "instId" => "ETH-USDT-SWAP"],
+            ["channel" => "positions", "instType" => "SWAP", "instId" => $this->redis->hget('config', 'currentcy')],
         ], function ($data) {
-            // 机器人是否暂停
+            // 机器人暂停
             if ($this->redis->exists('stop_robot')) return false;
-            // 接口不通，休息
+            // 接口不通
             if ($this->redis->exists('rest')) return false;
             
             // 当前有仓位
@@ -80,17 +80,21 @@ class Client
         $this->redis->hset('config', 'stopLossRatio', $this->config['other']['stopLossRatio']);
         // 总补仓次数
         $this->redis->hset('config', 'allAddPositionNum', $this->config['other']['allAddPositionNum']);
-        // 首单ETH数量
+        // 首单数量
         $this->redis->hset('config', 'firstOrder', $this->config['other']['firstOrder']);
         // 补仓策略
         $this->redis->hset('config', 'tactics', $this->config['other']['tactics']);
+		// 交易对
+        $this->redis->hset('config', 'currency', $this->config['other']['currency']);
+		// 交易币种
+		$this->redis->hset('config', 'currencyCoin', explode('-', $this->config['other']['currency'])[0] ?? 'ETH');
     }
     
     // 持仓处理
     public function orderHandle(array $data)
     {
         foreach ($data as $k => $v) {
-            // 简单校验，保证有效数据
+            // 简单校验，保证数据有效
             if (is_numeric($v['upl'])) {
                 // 记录当前仓位基本信息
                 $this->recordInfo($v);
@@ -149,8 +153,9 @@ class Client
         ($sz == 0) && ($this->writeln(($side == 'buy' && $posSide == 'long') ? '方向确定，开多...' : '方向确定，开空...'));
         
         try {
+			// 此处使用API下单，而不是websocket，保证稳定性
             $result = $this->okex->trade()->postOrder([
-                'instId'    =>  'ETH-USDT-SWAP',
+                'instId'    =>  $this->redis->hget('config', 'currentcy'),
                 'tdMode'    =>  'cross',
                 'side'      =>  $side,
                 'posSide'   =>  $posSide,
@@ -159,7 +164,7 @@ class Client
                 'sz'        =>  ($sz ?: $this->redis->hget('config', 'firstOrder')) * 100,
             ]);
             
-            // code转整数
+            // code强转整数
             $result['code'] = (int)$result['code'];
             // 如果下单时接口不通
             if (in_array($result['code'], [50001, 50004, 50013, 50026])) {
@@ -182,7 +187,7 @@ class Client
             $this->redis->set('lastNum', $sz ?: $this->redis->hget('config', 'firstOrder'));
             // 补仓成功
             if ($sz > 0) {
-                $this->writeln('补仓成功，数量：'.$sz.' ETH');
+                $this->writeln('补仓成功，数量：'.$sz.' '.$this->redis->hget('config', 'currentcyCoin'));
                 // 补仓次数+1
                 $this->redis->Incr('addPositionNum');
                 // 解补仓锁
@@ -190,7 +195,7 @@ class Client
                 return true;
             }
             // 开单成功
-            $this->writeln('开单成功，数量：'.$this->redis->hget('config', 'firstOrder').' ETH');
+            $this->writeln('开单成功，数量：'.$this->redis->hget('config', 'firstOrder').' '.$this->redis->hget('config', 'currentcyCoin'));
         } catch (\Exception $e){
             $this->writeln('报错：'.$e->getMessage());
         }
@@ -201,7 +206,7 @@ class Client
     {
         try {
             $result = $this->okex->trade()->postClosePosition([
-                'instId'    =>  'ETH-USDT-SWAP',
+                'instId'    =>  $this->redis->hget('config', 'currentcy'),
                 'posSide'   =>  $posSide,
                 'mgnMode'   =>  'cross',
             ]);
@@ -295,6 +300,12 @@ class Client
         // 可用保证金
         $this->redis->hset('info', 'lever', $data['lever']);
     }
+	
+	// 动态止盈率调整
+	public function dynamicProfit()
+	{
+	    
+	}
     
     // 动态止损率调整
     public function dynamicStopLoss()

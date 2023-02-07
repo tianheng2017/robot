@@ -25,9 +25,11 @@ $config = [
         'tactics'                   =>  1,
         // 补仓次数
         'allAddPositionNum'         =>  10,
-        // 首单ETH数量
-        'firstOrder'                =>  20,
+        // 首单数量
+        'firstOrder'                =>  20000,
         // USDT初始资金
         'usdtInit'                  =>  7000,
+		// 交易对 默认ETH/USDT永续
+		'currency'					=>	"GRT-USDT-SWAP",
     ],
 ];

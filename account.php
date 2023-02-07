@@ -23,7 +23,6 @@ class Account
         
         // 频道订阅
         $this->okex_socket->subscribe([
-            
             // 账户频道
             ["channel" => "account", "ccy" => "USDT"],
             
@@ -31,7 +30,6 @@ class Account
         
         // 获取账户频道数据推送
         $this->okex_socket->getSubscribe([
-            
             // 账户频道
             ["channel" => "account", "ccy" => "USDT"],
             
@@ -39,7 +37,6 @@ class Account
             
             // 解析数据
             if (!empty(array_values($data)[0]['data'][0]['details'][0])) {
-                
                 // 解析数据
                 $data = array_values($data)[0]['data'][0]['details'][0];
                 
@@ -63,7 +60,6 @@ class Account
                 $this->redis->hset('statistical', 'today_profit', round($data['eq'] - $this->redis->hget('statistical', 'today_eq'), 2));
                 // 今日盈利率
                 $this->redis->hset('statistical', 'today_profit_ratio', $this->redis->hget('statistical', 'today_eq') ? round((($data['eq'] - $this->redis->hget('statistical', 'today_eq')) / $this->redis->hget('statistical', 'today_eq')) * 100, 4) : 0);
-                
             }
             
         }, true);
@@ -85,7 +81,7 @@ class Account
         // 传入API信息
         $this->okex_socket->keysecret($this->config['keysecret']);
         
-        // 将机器人配置载入redis，方便动态配置（第二种刷新配置方式，不用每次去重启client）
+        // 将机器人配置载入redis，方便动态配置（第二种刷新配置方式，第一种是重启client，但每次去重启client影响炒币，所以重启account即可）
         // USDT初始资金
         $this->redis->hset('config', 'usdt_init', $this->config['other']['usdtInit']);
         // 止盈率
@@ -98,6 +94,10 @@ class Account
         $this->redis->hset('config', 'firstOrder', $this->config['other']['firstOrder']);
         // 补仓策略
         $this->redis->hset('config', 'tactics', $this->config['other']['tactics']);
+		// 交易对
+		$this->redis->hset('config', 'currency', $this->config['other']['currency']);
+		// 交易币种
+		$this->redis->hset('config', 'currencyCoin', explode('-', $this->config['other']['currency'])[0] ?? 'ETH');
     }
 }
 
