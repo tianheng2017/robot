@@ -231,8 +231,9 @@ uni.onSocketOpen(function(res) {
 		appStore.data.list = res.data.list;
 		// 获取其他数据
 		appStore.data.other = res.data.other;
+		// 关闭加载层
+		loading.close();
 	});
-	loading.close();
 });
 // 打开webSocket失败
 uni.onSocketError(function(res) {
