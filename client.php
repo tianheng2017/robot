@@ -116,7 +116,7 @@ class Client
                         
                         // 遇到补仓锁，跳过不处理
                         if ($this->redis->exists('addPositionLock')) {
-                            $this->writeln('有正在补仓的操作，本轮跳过...');
+//                            $this->writeln('有正在补仓的操作，本轮跳过...');
                             continue;
                         }
                         $this->writeln('达到补仓条件，开始补仓...');
