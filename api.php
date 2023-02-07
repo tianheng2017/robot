@@ -89,7 +89,7 @@ $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($redis)
                     // 总盈利
                     'total_profit'          =>  $redis->hget('statistical', 'total_profit'),
                     // 总盈利率
-                    'total_profit_ratio'    =>  $redis->hget('statistical', 'total_profit_ratio'),
+                    'total_profit_ratio'    =>  $redis->hget('statistical', 'total_profit_ratio').' %',
                     // 今日盈利
                     'today_profit'          =>  $redis->hget('statistical', 'today_profit'),
                     // 今日盈利率
