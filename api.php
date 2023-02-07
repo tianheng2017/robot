@@ -47,7 +47,7 @@ $ws_worker->onClose = function($connection)
 
 $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($redis)
 {
-    Timer::add(1, function() use ($connection, $redis) {
+    Timer::add(2, function() use ($connection, $redis) {
         // 在线人数
         global $connection_count;
         
