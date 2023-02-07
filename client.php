@@ -20,11 +20,7 @@ class Client
     {
         // 初始化/载入配置
         $this->init($config);
-		
-        // 取消频道订阅
-        $this->okex_socket->unsubscribe([
-            ["channel" => "positions", "instType" => "SWAP", "instId" => "ETH-USDT-SWAP"],
-        ]);
+
         // 频道订阅
         $this->okex_socket->subscribe([
             // 持仓频道
