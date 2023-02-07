@@ -177,7 +177,7 @@ class Client
                 return false;
             // 其他错误
             } else if ($result['code'] > 0) {
-                throw new Exception($result);
+                throw new Exception(json_encode($result));
             }
             
             // 今日做单次数+1
