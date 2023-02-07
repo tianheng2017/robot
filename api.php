@@ -100,8 +100,6 @@ $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($redis)
                     'avgPx'                 =>  $redis->hget('info', 'avgPx'),
                     // 最新成交价
                     'last'                  =>  $redis->hget('info', 'last'),
-                    // 未实现收益
-                    'upl'                   =>  $redis->hget('info', 'upl'),
                     // 本单收益率
                     'uplRatio'              =>  $redis->hget('info', 'uplRatio').' %',
                     // 杠杆倍数

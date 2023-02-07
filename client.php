@@ -24,14 +24,13 @@ class Client
         // 频道订阅
         $this->okex_socket->subscribe([
             // 持仓频道
-            ["channel" => "positions", "instType" => "SWAP", "instId" => $this->redis->hget('config', 'currentcy')],
+            ["channel" => "positions", "instType" => "SWAP", "instId" => $this->redis->hget('config', 'currency')],
         ]);
         
         // 获取持仓频道数据推送
         $this->okex_socket->getSubscribe([
-            ["channel" => "positions", "instType" => "SWAP", "instId" => $this->redis->hget('config', 'currentcy')],
+            ["channel" => "positions", "instType" => "SWAP", "instId" => $this->redis->hget('config', 'currency')],
         ], function ($data) {
-            $this->writeln(json_encode($data));
             // 非 机器人暂停 或 接口不通
             if (!$this->redis->exists('stop_robot') && !$this->redis->exists('rest')) {
                 // 当前有仓位
@@ -154,7 +153,7 @@ class Client
         try {
 			// 此处使用API下单，而不是websocket，保证稳定性
             $result = $this->okex->trade()->postOrder([
-                'instId'    =>  $this->redis->hget('config', 'currentcy'),
+                'instId'    =>  $this->redis->hget('config', 'currency'),
                 'tdMode'    =>  'cross',
                 'side'      =>  $side,
                 'posSide'   =>  $posSide,
@@ -177,7 +176,7 @@ class Client
                 return false;
             // 其他错误
             } else if ($result['code'] > 0) {
-                throw new Exception($result['data']['sMsg']);
+                throw new Exception($result['data']['sMsg'] ?? $result['msg']);
             }
             
             // 今日做单次数+1
@@ -205,7 +204,7 @@ class Client
     {
         try {
             $result = $this->okex->trade()->postClosePosition([
-                'instId'    =>  $this->redis->hget('config', 'currentcy'),
+                'instId'    =>  $this->redis->hget('config', 'currency'),
                 'posSide'   =>  $posSide,
                 'mgnMode'   =>  'cross',
             ]);
@@ -219,7 +218,7 @@ class Client
                 return false;
             // 普通错误    
             } else if ($result['code'] > 0) {
-                throw new Exception($result['data']['sMsg']);
+                throw new Exception($result['data']['sMsg'] ?? $result['msg']);
             }
             
             $this->writeln('清仓成功，等待开单...');
