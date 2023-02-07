@@ -159,7 +159,7 @@ class Client
                 'posSide'   =>  $posSide,
                 'ordType'   =>  'market',
                 // 非补仓读取首单数量
-                'sz'        =>  ($sz ?: $this->redis->hget('config', 'firstOrder')) * 100,
+                'sz'        =>  $sz ?: $this->redis->hget('config', 'firstOrder'),
             ]);
             
             // code强转整数
@@ -176,7 +176,7 @@ class Client
                 return false;
             // 其他错误
             } else if ($result['code'] > 0) {
-                throw new Exception(json_encode($result));
+                throw new Exception($result['data'][0]['sMsg'] || $result['msg']);
             }
             
             // 今日做单次数+1
@@ -193,7 +193,7 @@ class Client
                 return true;
             }
             // 开单成功
-            $this->writeln('开单成功，数量：'.$this->redis->hget('config', 'firstOrder').' '.$this->redis->hget('config', 'currentcyCoin'));
+            $this->writeln('开单成功，数量：'.$this->redis->hget('config', 'firstOrder').' '.$this->redis->hget('config', 'currencyCoin'));
         } catch (\Exception $e){
             $this->writeln('报错：'.$e->getMessage());
         }
@@ -218,7 +218,7 @@ class Client
                 return false;
             // 普通错误    
             } else if ($result['code'] > 0) {
-                throw new Exception($result['data']['sMsg'] ?? $result['msg']);
+                throw new Exception($result['data'][0]['sMsg'] ?? $result['msg']);
             }
             
             $this->writeln('清仓成功，等待开单...');
