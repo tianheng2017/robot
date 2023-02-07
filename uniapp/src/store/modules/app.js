@@ -62,11 +62,8 @@ const useAppStore = defineStore('app', () => {
 }, {
 	// store持久化
 	persist: {
-		enabled: true,
-		strategies:[{
-			key: "store",
-			storage: sessionStorage,
-		}],
+		key: "store",
+		storage: sessionStorage,
 	}
 })
 
