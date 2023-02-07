@@ -24,12 +24,12 @@ class Client
         // 频道订阅
         $this->okex_socket->subscribe([
             // 持仓频道
-            ["channel" => "positions", "instType" => "SWAP", "instId" => $this->config['other']['currentcy']],
+            ["channel" => "positions", "instType" => "SWAP", "instId" => $this->redis->hget('config', 'currentcy')],
         ]);
         
         // 获取持仓频道数据推送
         $this->okex_socket->getSubscribe([
-            ["channel" => "positions", "instType" => "SWAP", "instId" => $this->config['other']['currentcy']],
+            ["channel" => "positions", "instType" => "SWAP", "instId" => $this->redis->hget('config', 'currentcy')],
         ], function ($data) {
             $this->writeln(json_encode($data));
             // 非 机器人暂停 或 接口不通
@@ -154,7 +154,7 @@ class Client
         try {
 			// 此处使用API下单，而不是websocket，保证稳定性
             $result = $this->okex->trade()->postOrder([
-                'instId'    =>  $this->config['other']['currentcy'],
+                'instId'    =>  $this->redis->hget('config', 'currentcy'),
                 'tdMode'    =>  'cross',
                 'side'      =>  $side,
                 'posSide'   =>  $posSide,
@@ -205,7 +205,7 @@ class Client
     {
         try {
             $result = $this->okex->trade()->postClosePosition([
-                'instId'    =>  $this->config['other']['currentcy'],
+                'instId'    =>  $this->redis->hget('config', 'currentcy'),
                 'posSide'   =>  $posSide,
                 'mgnMode'   =>  'cross',
             ]);
