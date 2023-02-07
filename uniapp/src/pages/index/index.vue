@@ -102,7 +102,7 @@
 		[{
 				'usdt_init': '初始资金',
 				'eq': '账户权益',
-				'lever': '杠杆倍数',
+                'billingStrategy': '开单策略',
 			},
 			{
 				'firstOrder': '首单数量',
@@ -123,7 +123,7 @@
 		[{
 				'last': '当前价格',
 				'avgPx': '开仓均价',
-				'billingStrategy': '开单策略',
+                'lever': '杠杆倍数',
 			},
 			{
 				'frozenBal': '占用保证金',
