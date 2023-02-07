@@ -31,6 +31,7 @@ class Client
         $this->okex_socket->getSubscribe([
             ["channel" => "positions", "instType" => "SWAP", "instId" => $this->redis->hget('config', 'currentcy')],
         ], function ($data) {
+            $this->writeln(json_encode($data));
             // 非 机器人暂停 或 接口不通
             if (!$this->redis->exists('stop_robot') && !$this->redis->exists('rest')) {
                 // 当前有仓位
@@ -153,7 +154,7 @@ class Client
         try {
 			// 此处使用API下单，而不是websocket，保证稳定性
             $result = $this->okex->trade()->postOrder([
-                'instId'    =>  (string)$this->redis->hget('config', 'currentcy'),
+                'instId'    =>  $this->redis->hget('config', 'currentcy'),
                 'tdMode'    =>  'cross',
                 'side'      =>  $side,
                 'posSide'   =>  $posSide,
