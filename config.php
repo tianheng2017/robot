@@ -30,6 +30,6 @@ $config = [
         // USDT初始资金
         'usdtInit'                  =>  7000,
 		// 交易对 默认ETH/USDT永续
-		'currency'					=>	"GRT-USDT-SWAP",
+		'currency'					=>	"ETH-USDT-SWAP",
     ],
 ];
