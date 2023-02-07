@@ -166,16 +166,18 @@ class Client
             $result['code'] = (int)$result['code'];
             // 如果下单时接口不通
             if (in_array($result['code'], [50001, 50004, 50013, 50026])) {
-                $this->writeln('接口不通，休息60秒...');
+                // 接口不通，休息60秒
                 $this->redis->setex('rest', 60, 1);
-                return false;
-            } else if ($sz > 0 && $result['code'] == 51004) { // 如果接口通畅，但补仓时余额不足
-                $this->writeln('余额不足，补仓失败，准备清仓...');
-                // 增大补仓次数，让下次请求触发清仓
+                throw new Exception('接口不通，休息60秒...');
+            // 如果接口通畅，但补仓时余额不足
+            } else if ($sz > 0 && $result['code'] == 51004) {
+                // 增大补仓次数，让下次请求触发清仓，这里不需要休息60秒，否则黄花菜都凉了
                 $this->redis->set('addPositionNum', 9999999999);
-                return false;
+                throw new Exception('余额不足，补仓失败，准备清仓...');
             // 其他错误
             } else if ($result['code'] > 0) {
+                // 其他错误，也休息60秒
+                $this->redis->setex('rest', 60, 1);
                 throw new Exception(json_encode($result['data'][0]['sMsg']));
             }
             
@@ -214,11 +216,12 @@ class Client
             $result['code'] = (int)$result['code'];
             // 如果下单时接口不通
             if (in_array($result['code'], [50001, 50004, 50013, 50026])) {
-                $this->writeln('接口不通，休息60秒...');
                 $this->redis->setex('rest', 60, 1);
-                return false;
-            // 普通错误    
+                throw new Exception('接口不通，休息60秒...');
+            // 其他错误
             } else if ($result['code'] > 0) {
+                // 其他错误也休息60秒
+                $this->redis->setex('rest', 60, 1);
                 throw new Exception(json_encode($result['data'][0]['sMsg']));
             }
             
@@ -300,6 +303,8 @@ class Client
         $this->redis->hset('info', 'lever', $data['lever']);
         // 可用保证金
         $this->redis->hset('info', 'lever', $data['lever']);
+
+        return true;
     }
 	
 	// 动态止盈率调整
