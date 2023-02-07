@@ -28,7 +28,7 @@ $config = [
         // 首单数量
         'firstOrder'                =>  50000,
         // USDT初始资金
-        'usdtInit'                  =>  7000,
+        'usdtInit'                  =>  400000,
 		// 永续交易对
 		'currency'					=>	"GRT-USDT-SWAP",
     ],
