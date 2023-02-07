@@ -219,7 +219,7 @@ class Client
                 return false;
             // 普通错误    
             } else if ($result['code'] > 0) {
-                throw new Exception($result['msg']);
+                throw new Exception($result);
             }
             
             $this->writeln('清仓成功，等待开单...');
