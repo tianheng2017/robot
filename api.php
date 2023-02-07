@@ -61,7 +61,7 @@ $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($redis)
                 // 其他数据
                 'other'         =>  [
                     // USDT初始资金
-                    'usdt_init'             =>  $redis->hget('config', 'usdt_init'),
+                    'usdt_init'             =>  $redis->hget('config', 'usdt_init').' USDT',
                     // 止盈率
                     'profitRatio'           => $redis->hget('config', 'profitRatio').' %',
                     // 止损率
@@ -75,23 +75,23 @@ $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($redis)
 					// 交易币种
 					'currencyCoin'			=>	$redis->hget('config', 'currencyCoin'),
                     // 账户总权益
-                    'eq'                    =>  $redis->hget('statistical', 'eq'),
+                    'eq'                    =>  $redis->hget('statistical', 'eq').' USDT',
                     // 可用保证金
-                    'availEq'               =>  $redis->hget('statistical', 'availEq'),
+                    'availEq'               =>  $redis->hget('statistical', 'availEq').' USDT',
                     // 初始保证金
-                    'frozenBal'             =>  $redis->hget('statistical', 'frozenBal'),
+                    'frozenBal'             =>  $redis->hget('statistical', 'frozenBal').' USDT',
                     // 保证金率
                     'mgnRatio'              =>  $redis->hget('statistical', 'mgnRatio').' %',
                     // 实际杠杆
                     'notionalLever'         =>  $redis->hget('statistical', 'notionalLever').' x',
                     // 未实现盈亏
-                    'upl'                   =>  $redis->hget('statistical', 'upl'),
+                    'upl'                   =>  $redis->hget('statistical', 'upl').' USDT',
                     // 总盈利
-                    'total_profit'          =>  $redis->hget('statistical', 'total_profit'),
+                    'total_profit'          =>  $redis->hget('statistical', 'total_profit').' USDT',
                     // 总盈利率
                     'total_profit_ratio'    =>  $redis->hget('statistical', 'total_profit_ratio').' %',
                     // 今日盈利
-                    'today_profit'          =>  $redis->hget('statistical', 'today_profit'),
+                    'today_profit'          =>  $redis->hget('statistical', 'today_profit').' USDT',
                     // 今日盈利率
                     'today_profit_ratio'    =>  $redis->hget('statistical', 'today_profit_ratio').' %',
 					// 今日做单
