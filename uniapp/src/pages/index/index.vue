@@ -119,9 +119,10 @@ onLoad(() => {
 			}
 		});
 	});
-	// webSocket已断开
+	// webSocket断开事件
 	uni.onSocketClose(function(res) {
 		showToast('websocket已断开');
+		// 尝试重连
 		uni.sendSocketMessage({
 			data: 'ping',
 			success: () => {
