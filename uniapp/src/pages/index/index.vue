@@ -32,8 +32,8 @@
 	</view>
 </template>
 <script setup>
-import { onLoad } from '@dcloudio/uni-app';
-import { computed, onBeforeUnmount, reactive, ref } from 'vue';
+import { onLoad, onUnload } from '@dcloudio/uni-app';
+import { computed, reactive, ref } from 'vue';
 import { showLoadingToast, showToast } from 'vant';
 import { useAppStore } from '@/store/modules/app';
 
@@ -88,8 +88,42 @@ const fieldsMap = [
 	]
 ];
 
+// 显示加载层
+showLoadingToast({
+	message: '加载中...',
+	forbidClick: true
+});
+// 连接websocket
+const socketTask = uni.connectSocket({
+	url: `${import.meta.env.VITE_APP_BASE_URL || ''}`,
+	complete: ()=> {}
+});
+// 打开webSocket
+socketTask.onOpen(function(res) {
+	// 发送ping请求数据
+	socketTask.send({
+		data: 'ping',
+		fail: () => {
+			showToast('打开websocket失败，请刷新页面');
+		}
+	});
+});
+// webSocket断开事件
+socketTask.onClose(function(res) {
+	showToast('websocket已断开');
+	// 尝试重连
+	socketTask.onOpen(function(res) {
+		// 发送ping请求数据
+		socketTask.send({
+			data: 'ping',
+			fail: () => {
+				showToast('打开websocket失败，请刷新页面');
+			}
+		});
+	});
+});
 // 监听websocket数据推送
-uni.onSocketMessage(function(res) {
+socketTask.onMessage(function(res) {
 	// 格式化数据
 	res = JSON.parse(res.data);
 	// 获取运行日志
@@ -98,45 +132,8 @@ uni.onSocketMessage(function(res) {
 	appStore.data.other = res.data.other;
 });
 
-// 在onLoad中连接并打开websocket
-onLoad(() => {
-	// 显示加载层
-	showLoadingToast({
-		message: '加载中...',
-		forbidClick: true
-	});
-	// 连接websocket
-	uni.connectSocket({
-		url: `${import.meta.env.VITE_APP_BASE_URL || ''}`
-	});
-	// 打开webSocket
-	uni.onSocketOpen(function(res) {
-		// 发送ping请求数据
-		uni.sendSocketMessage({
-			data: 'ping',
-			fail: () => {
-				showToast('打开websocket失败，请刷新页面');
-			}
-		});
-	});
-	// webSocket断开事件
-	uni.onSocketClose(function(res) {
-		showToast('websocket已断开');
-		// 尝试重连
-		uni.sendSocketMessage({
-			data: 'ping',
-			success: () => {
-				// 延迟显示，避免和上面的提示撞衫
-				setTimeout(() => {
-					showToast('websocket已重连');
-				}, 2000)
-			}
-		});
-	});
-});
-
-// 卸载页面前，关闭websocket、清除定时器
-onBeforeUnmount(() => {
-	uni.closeSocket();
+// 离开页面，断开连接
+onUnload(() => {
+	socketTask.close();
 });
 </script>
