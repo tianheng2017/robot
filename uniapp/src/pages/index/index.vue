@@ -88,7 +88,7 @@ const fieldsMap = [
 	]
 ];
 
-// websocket数据推送监听
+// 监听websocket数据推送
 uni.onSocketMessage(function(res) {
 	// 格式化数据
 	res = JSON.parse(res.data);
