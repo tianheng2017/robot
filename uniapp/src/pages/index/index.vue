@@ -94,7 +94,8 @@ showLoadingToast({
 	forbidClick: true
 });
 // 连接websocket
-const socketTask = uni.connectSocket({
+let socketTask;
+socketTask = uni.connectSocket({
 	url: `${import.meta.env.VITE_APP_BASE_URL || ''}`,
 	complete: ()=> {}
 });
@@ -112,12 +113,23 @@ socketTask.onOpen(function(res) {
 socketTask.onClose(function(res) {
 	showToast('websocket已断开');
 	// 尝试重连
+	socketTask = uni.connectSocket({
+		url: `${import.meta.env.VITE_APP_BASE_URL || ''}`,
+		complete: ()=> {}
+	});
 	socketTask.onOpen(function(res) {
 		// 发送ping请求数据
 		socketTask.send({
 			data: 'ping',
 			fail: () => {
-				showToast('打开websocket失败，请刷新页面');
+				setTimeout(() => {
+					showToast('websocket重连失败');
+				}, 2000)
+			},
+			success: () =>{
+				setTimeout(() => {
+					showToast('websocket重连成功');
+				}, 2000)
 			}
 		});
 	});
