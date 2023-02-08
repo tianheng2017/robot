@@ -7,7 +7,7 @@ require_once 'vendor/autoload.php';
 require_once 'config.php';
 
 /**
- *  OKEX模拟盘简易单用户单币种量化机器人
+ *  OKEX模拟盘单用户单币种量化机器人
 **/
 class Client
 {
@@ -99,8 +99,7 @@ class Client
                 $v['upl'] = round($v['upl'], 2);
                 // 未实现收益率
                 $v['uplRatio'] = round($v['uplRatio'] * 100, 2);
-                // $this->writeln('本单盈利：'.$v['upl'].' USDT，盈利率：'.$v['uplRatio'].' %');
-                
+
                 // 止盈条件
                 $condition1 = $v['uplRatio'] >= $this->redis->hget('config', 'profitRatio');
                 // 止损条件
