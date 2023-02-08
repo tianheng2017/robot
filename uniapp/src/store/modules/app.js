@@ -44,6 +44,7 @@ export const useAppStore = defineStore('app', () => {
 	// store持久化
 	persist: {
 		key: "store",
-		storage: sessionStorage,
+		// 只持久化必要数据，免得刷新页面后读到了缓存数据，还以为没亏钱~^_^~
+		paths: ['theme', 'tab', 'icon'],
 	}
 })
