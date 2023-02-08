@@ -90,7 +90,7 @@ class Client
     // 持仓处理
     public function orderHandle(array $data)
     {
-        foreach ($data as $k => $v) {
+        foreach ($data as $v) {
             // 简单校验，保证数据有效
             if (is_numeric($v['upl'])) {
                 // 记录当前仓位基本信息
@@ -110,8 +110,8 @@ class Client
                 if (($condition1 || $condition2) && !$this->redis->exists('closeLock')) {
                     // 如果此刻准备止损清仓了，且倍投次数未超限，先拦截进行补仓
                     if ($condition2 && ((int)$this->redis->get('addPositionNum') < $this->redis->hget('config', 'allAddPositionNum'))) {
-                        // （待开发）补仓回调逻辑：假设持续下跌，达到补仓点也不补仓，而是等到暴跌完毕反弹一点再补仓，让均价更低！
-                        //.............
+                        // （待开发）动态补仓逻辑：假设持续下跌，达到补仓点也不补仓，而是等到暴跌完毕，反弹一点再补仓，让均价更低！
+                        $this->dynamicStopLoss($v);
                         
                         // 遇到补仓锁，跳过不处理
                         if ($this->redis->exists('addPositionLock')) {
@@ -129,8 +129,8 @@ class Client
                         continue;
                     }
                     
-                    // （待开发）止盈回调逻辑：假设持续上涨，达到止盈条件也不止盈，而是等到主升浪拉升完毕，下跌一点时再止盈，让子弹多飞一会儿！
-                    //..............
+                    // （待开发）动态止盈逻辑：假设持续上涨，达到止盈条件也不止盈，而是等到主升浪拉升完毕，下跌一点时再止盈！
+                    $this->dynamicProfit($v);
     
                     $this->writeln('达到'.($condition1 ? '止盈' : '止损').'条件，开始清仓...');
                     // 上清仓锁，该位置的价格较重要，清仓完毕需立即解锁
@@ -305,13 +305,13 @@ class Client
         return true;
     }
 	
-	// 动态止盈率调整
+	// 动态止盈
 	public function dynamicProfit()
 	{
 	    
 	}
     
-    // 动态止损率调整
+    // 动态补仓
     public function dynamicStopLoss()
     {
         
