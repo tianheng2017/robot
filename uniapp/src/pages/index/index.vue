@@ -114,7 +114,7 @@ socketTask.onClose(function(res) {
 	// 刷新页面重连
 	setTimeout(() => {
 		window.location.reload();
-	}, 2000);
+	}, 1000);
 });
 // 监听websocket数据推送
 socketTask.onMessage(function(res) {
