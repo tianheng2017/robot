@@ -21,12 +21,12 @@ $config = [
         'profitCallbackRatio'       =>  0.5,
         // 补仓回调率（假设持续下跌，达到补仓点也不补仓，而是等到暴跌完毕，反弹一点再补仓，让均价更低） - 待开发
         'addPositionCallbackRatio'  =>  0.5,
-        // 补仓策略，1倍投，2等比，默认倍投
-        'tactics'                   =>  1,
+        // 补仓策略，1倍投，2等额，默认倍投
+        'tactics'                   =>  2,
         // 补仓次数
         'allAddPositionNum'         =>  10,
         // 首单数量
-        'firstOrder'                =>  50000,
+        'firstOrder'                =>  100000,
         // USDT初始资金
         'usdtInit'                  =>  390000,
 		// 永续交易对

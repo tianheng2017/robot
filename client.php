@@ -272,7 +272,7 @@ class Client
             case 1:
                 $amount = $lastNum * 2;
                 break;
-            // 等比
+            // 等额
             case 2:
                 $amount = $lastNum;
                 break;
