@@ -26,7 +26,7 @@
 						<van-empty v-else class="mt-2.5" description="暂无数据" />
 					</van-tab>
 				</van-tabs>
-				<view class="text-center text-title2 text-sm fixed bottom-2 right-0 left-0">在线：{{ appStore.data.other.online || 0 }}</view>
+				<view class="text-center text-title2 text-sm fixed bottom-2 right-0 left-0">在线：{{ appStore.data.other.online || '0 人' }}</view>
 			</view>
 		</van-config-provider>
 	</view>
