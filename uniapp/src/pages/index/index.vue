@@ -122,6 +122,14 @@ onLoad(() => {
 	// webSocket已断开
 	uni.onSocketClose(function(res) {
 		showToast('websocket已断开');
+		uni.sendSocketMessage({
+			data: 'ping',
+			success: () => {
+				setTimeout(() => {
+					showToast('websocket已重连');
+				}, 2000)
+			}
+		});
 	});
 });
 
