@@ -98,7 +98,7 @@ uni.onSocketMessage(function(res) {
 	appStore.data.other = res.data.other;
 });
 
-// 连接并打开websocket
+// 在onLoad中连接并打开websocket
 onLoad(() => {
 	// 显示加载层
 	showLoadingToast({
