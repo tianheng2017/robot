@@ -32,8 +32,8 @@
 	</view>
 </template>
 <script setup>
-import { onLoad, onUnload } from '@dcloudio/uni-app';
-import { computed, reactive, ref } from 'vue';
+import { onUnload } from '@dcloudio/uni-app';
+import { reactive } from 'vue';
 import { showLoadingToast, showToast } from 'vant';
 import { useAppStore } from '@/store/modules/app';
 
