@@ -47,6 +47,7 @@ $ws_worker->onClose = function($connection)
 
 $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($redis)
 {
+	// 每2秒推送一次
     Timer::add(2, function() use ($connection, $redis) {
         // 在线人数
         global $connection_count;
@@ -78,7 +79,7 @@ $ws_worker->onMessage = function(TcpConnection $connection, $data) use ($redis)
                     'eq'                    =>  $redis->hget('statistical', 'eq').' USDT',
                     // 可用保证金
                     'availEq'               =>  $redis->hget('statistical', 'availEq').' USDT',
-                    // 初始保证金
+                    // 占用保证金
                     'frozenBal'             =>  $redis->hget('statistical', 'frozenBal').' USDT',
                     // 保证金率
                     'mgnRatio'              =>  $redis->hget('statistical', 'mgnRatio').' %',

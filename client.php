@@ -23,7 +23,6 @@ class Client
 
         // 频道订阅
         $this->okex_socket->subscribe([
-            // 持仓频道
             ["channel" => "positions", "instType" => "SWAP", "instId" => $this->redis->hget('config', 'currency')],
         ]);
         
@@ -35,7 +34,7 @@ class Client
             if (!$this->redis->exists('stop_robot') && !$this->redis->exists('rest')) {
                 // 当前有仓位
                 if (!empty(array_values($data)[0]['data'])) {
-                    // 持续刷新持仓锁，连续30秒都没持仓数据才准开单，只做单仓位
+                    // 持续刷新持仓锁（连续30秒都没持仓数据才准开单，只做单仓位）
                     $this->redis->setex('positionLock', 30, 1);
                     // 解析数据
                     $data = array_values($data)[0]['data'];
@@ -60,11 +59,11 @@ class Client
         $this->redis = new Predis\Client($this->config['redis']);
         
         $this->okex = new OkexV5($this->config['keysecret']['key'], $this->config['keysecret']['secret'], $this->config['keysecret']['passphrase']);
-        // 使用模拟盘下单
+        // 模拟盘下单参数
         $this->okex->setOptions([
             'headers' => ['x-simulated-trading' => 1]
         ]);
-        
+		// 实例化websocket
         $this->okex_socket = new OkexWebSocketV5();
         // 传入API信息
         $this->okex_socket->keysecret($this->config['keysecret']);
@@ -116,7 +115,7 @@ class Client
                         
                         // 遇到补仓锁，跳过不处理
                         if ($this->redis->exists('addPositionLock')) {
-                            $this->writeln('有正在补仓的操作，本轮跳过...');
+                            $this->writeln('正在补仓中，本轮跳过...');
                             continue;
                         }
                         $this->writeln('达到补仓条件，开始补仓...');
@@ -128,7 +127,6 @@ class Client
                         $v['posSide'] == 'long' ? $this->createOrder('buy', 'long', $amount) : $this->createOrder('sell', 'short', $amount);
                         // 拦截完毕，处理下一条数据
                         continue;
-                        
                     }
                     
                     // （待开发）止盈回调逻辑：假设持续上涨，达到止盈条件也不止盈，而是等到主升浪拉升完毕，下跌一点时再止盈，让子弹多飞一会儿！
@@ -162,11 +160,11 @@ class Client
                 'sz'        =>  ($sz ?: $this->redis->hget('config', 'firstOrder')) / 10,
             ]);
             
-            // code强转整数
+            // code转整数
             $result['code'] = (int)$result['code'];
-            // 如果下单时接口不通
+            // 如果下单接口不通
             if (in_array($result['code'], [50001, 50004, 50013, 50026])) {
-                // 接口不通，休息60秒
+                // 休息60秒
                 $this->redis->setex('rest', 60, 1);
                 throw new Exception('接口不通，休息60秒...');
             // 如果接口通畅，但补仓时余额不足
