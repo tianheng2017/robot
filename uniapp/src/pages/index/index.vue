@@ -56,7 +56,7 @@ const fieldsMap = [
 		{
 			firstOrder: '首单数量',
 			profitRatio: '止盈率',
-			stopLossRatio: '止损率'
+			stopLossRatio: '补仓/止损'
 		},
 		{
 			allAddPositionNum: '最大补仓',
