@@ -126,6 +126,7 @@ onLoad(() => {
 		uni.sendSocketMessage({
 			data: 'ping',
 			success: () => {
+				// 延迟显示，避免和上面的提示撞衫
 				setTimeout(() => {
 					showToast('websocket已重连');
 				}, 2000)
