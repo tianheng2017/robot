@@ -5,7 +5,7 @@
 			<view class="py-5 text-center">
 				<van-image width="60" src="/static/logo.png" />
 				<view class="light text-4xl mt-2">周易量化</view>
-				<view class="mt-4 text-sm text-title2">宇宙万法，大道至简，趋利避害，定转乾坤</view>
+				<view class="mt-4 text-sm text-title2">okex模拟盘-单币种单仓位量化机器人</view>
 			</view>
 			<view>
 				<van-tabs v-model:active="appStore.tab" :animated="true">
